@@ -16,14 +16,14 @@ alwaysApply: true
 - Filterable list with restaurant cards
 - Display key restaurant information:
 	- Photo
-	- Name, cuisine type, price range, rating
+	- Name, price range, rating
 	- Distance from your location
 	- Google Maps link for easy navigation
 - Simple filtering options:
 	- Filter with buttons
-	- Distance (1mi, 2mi, 5mi, 10mi)
-	- Rating (above 1, 2, 3, or 4)
-	- Price range (all, $, $$, $$$ or $$$$)
+	- Distance (within 1mi, 2mi, 5mi, 10mi) (5 mile by default)
+	- Rating (above 1, 2, 3, or 4)(no filter by default)
+	- Price range (less than or equal to $, $$, $$$ or $$$$)(no filter by default)
 - Sort list by desc number of attendees
 
 ### 2. Attendee Coordination
@@ -59,6 +59,10 @@ alwaysApply: true
 ## Phase 2 - APIs
 
 1. Implement the APIs described in #API Details
+- Rules:
+	- the api will interacted with directly from UI route server functions
+	- no caching as we need to build as fast and simple as possible
+	- surface google api error details in UI error boundary
 
 ## Phase 3 - UI Components
 
@@ -74,32 +78,19 @@ alwaysApply: true
 		- Use `react-router` imports - DO NOT USE ANY `@remix-run/*`  or `react-router-dom` imports
 		- DO NOT use a `json({})` wrapper for server function responses. Just return the object directly.
 		- DO NOT use client side state or fetching, rather:
-
 			- Manage state with server side loaders and actions
-
 			- Use `useFetcher()` for smaller UI updates
-
-
 		- Use loading states and optimistic UI with suspense and promise responses from the server
-
 			- rollback on error
-
 			- show pending state until confirmed
-
 
 	- Routes
 		1. `routes/users+/$username_+/restaurants`
-
 			- the loader should fetch nearby restaurants to Hilton Salt Lake City based on filters
-
 				- filters should be URL search params
-
 			- the action should handle joining and leaving restaurants
-
 				- upsert the restaurant in the db first before joining it
-
 			- use Fetchers to trigger joining and leaving restaurants
-
 			- the user should be able to navigate here using the nav dropdown (use a magnifying glass icon)
 
 # Phase 5 - Deployment
@@ -123,9 +114,13 @@ alwaysApply: true
 ### Google Places
 
 - Lives in `utils/providers/google-places.server.ts` 
-- Two primary Google API endpoints:
-	- Nearby Search: [https://maps.googleapis.com/maps/api/place/nearbysearch/json](mdc:https:/maps.googleapis.com/maps/api/place/nearbysearch/json)
-	- Place Details: [https://maps.googleapis.com/maps/api/place/details/json](mdc:https:/maps.googleapis.com/maps/api/place/details/json)
 - use the types from `@types/google.maps` 
-- Support filtering by various parameters
-- no caching
+- has a single getNearbyRestaurants({lat, lng, radius, minRating, maxPrice}) function:
+	- Uses two primary Google API endpoints:
+		- Nearby Search: [https://maps.googleapis.com/maps/api/place/nearbysearch/json](mdc:https:/maps.googleapis.com/maps/api/place/nearbysearch/json)
+		- Place Details: [https://maps.googleapis.com/maps/api/place/details/json](mdc:https:/maps.googleapis.com/maps/api/place/details/json)
+	- Makes an initial Nearby Search request to get basic restaurant information and applies the price filter directly in the API call
+    - Filters results by rating locally
+	- For each restaurant found, makes a parallel request to the Place Details API to get additional information like formatted address, photos, and Maps URL
+	- Transforms the data to match our database schema	
+	- Returns a list of restaurants

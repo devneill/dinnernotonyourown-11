@@ -72,6 +72,7 @@
     "@simplewebauthn/browser": "^13.1.0",
     "@simplewebauthn/server": "^13.1.1",
     "@tusbar/cache-control": "1.0.2",
+    "@types/google.maps": "^3.58.1",
     "address": "^2.0.3",
     "bcryptjs": "^3.0.2",
     "better-sqlite3": "^11.8.1",

@@ -45,31 +45,29 @@ alwaysApply: true
 	2. Add required placeholders to .env
 	3. Update env.server so the env var types are correct
 	4. Ask me to add the real keys to .env, and then deploy them to Fly with `fly secrets set`
-
-## Phase 2 - Database
-
-1. Add db models
-	- **Restaurants** (cached from API):
-		- id, name, address, cuisineType, priceLevel, rating, lat, lng, photoUrl, mapsUrl
-	- **DinnerGroups**:
+3. Prepare database
+	1. Add db models
+		- **Restaurants** (cached from API):
+			- id, name, address, cuisineType, priceLevel, rating, lat, lng, photoUrl, mapsUrl
+		- **DinnerGroups**:
 		- id, restaurantId, notes, createdAt
-	- **Attendees**:
-		- id, userId, dinnerGroupId, createdAt
-2. Run the migrations
-3. Run `npx prisma db seed` (don't edit the seed file, just run it)
+		- **Attendees**:
+			- id, userId, dinnerGroupId, createdAt
+	2. Run the migrations
+	3. Run `npx prisma db seed` (don't edit the seed file, just run it)
 
-## Phase 3 - APIs
+## Phase 2 - APIs
 
 1. Implement the APIs described in #API Details
 
-## Phase 4 - UI Components
+## Phase 3 - UI Components
 
 1. Add required UI Components. shadcn/ui is already installed, just add missing components with `npx shadcn@latest`
 	- Rules:
 		- Update all new components that have `#app/lib/utils` imports to be `#app/utils/misc.tsx`
 		- Install `lucide-react` for icons
 
-## Phase 5 - UI Routes
+## Phase 4 - UI Routes
 
 1. Add UI routes
 	- Rules:
@@ -104,7 +102,7 @@ alwaysApply: true
 
 			- the user should be able to navigate here using the nav dropdown (use a magnifying glass icon)
 
-# Phase 6 - Deployment
+# Phase 5 - Deployment
 
 1. Push to GitHub to deploy
 2. Connect to custom domain
@@ -126,8 +124,8 @@ alwaysApply: true
 
 - Lives in `utils/providers/google-places.server.ts` 
 - Two primary Google API endpoints:
-	- Nearby Search: [https://maps.googleapis.com/maps/api/place/nearbysearch/json](https://maps.googleapis.com/maps/api/place/nearbysearch/json)
-	- Place Details: [https://maps.googleapis.com/maps/api/place/details/json](https://maps.googleapis.com/maps/api/place/details/json)
+	- Nearby Search: [https://maps.googleapis.com/maps/api/place/nearbysearch/json](mdc:https:/maps.googleapis.com/maps/api/place/nearbysearch/json)
+	- Place Details: [https://maps.googleapis.com/maps/api/place/details/json](mdc:https:/maps.googleapis.com/maps/api/place/details/json)
 - use the types from `@types/google.maps` 
 - Support filtering by various parameters
 - no caching
